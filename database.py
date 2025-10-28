@@ -1,19 +1,18 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from test import file
+from helpers import file
 
 
 
-def get_collection():
-    uri = file()
-    client = MongoClient(uri, server_api=ServerApi('1'))
-    
-    try:
-        print(client.admin.command('ping'))
-        db = client["App"]
-        users = db["Users"]
-        return users
-    except Exception as e:
-        print(e)
-    
-# users = get_collection()
+
+uri = file('db.txt')
+client = MongoClient(uri, server_api=ServerApi('1'))
+
+try:
+    print(client.admin.command('ping'))
+    db = client["App"]
+    users_collection = db['Users']
+    recipes_collection = db["Recipe"]
+except Exception as e:
+    print(e)
+
