@@ -73,4 +73,92 @@ def get_recipe_by_id(id_num):
     
     return response
 
+@recipes.route('/add-favorite/<int:id_num>', methods=['POST'])
+def add_recipe_in_favorite(id_num):
+    data = request.json
+    username = data.get('username', None)
+    
+    if not username :
+        res = {"message": "Missing user"}
+        status = 400
+    else:
+        update_recipe = recipes_collection.update_one(
+            {"id": id_num},
+            {"$addToSet": {"added_favorite": username}}
+            )
+        
+        if update_recipe.matched_count == 0:
+            res = {"message": "No recipe found"}
+            status = 400
+        elif update_recipe.modified_count == 0:
+            res = {"message": "Already favorite"}
+            status = 200
+        else:
+            res = {"message": "Favorite added"}
+            status = 400
+            
+    response = Response(
+        response = json.dumps(res),
+        status = status,
+        mimetype = "application/json"
+        )
+    
+    return response
 
+@recipes.route("/favorites", methods=['GET'])
+def get_favorites_by_user():
+    data = request.json
+    username = data.get('username', None)
+    
+    if not username:
+        res = {"message": "Missing user"}
+        status = 400
+    else:
+        recipes = recipes_collection.find({'added_favorite': username})
+        if recipes:
+            res = [fix_id(recipe) for recipe in recipes]
+            status = 200
+        else:
+            res = {"message": "No favorite recipes found"}
+            status = 400
+    
+    response = Response(
+        response=json.dumps(res),
+        status=status,
+        mimetype="application/json"
+        )
+    return response
+
+@recipes.route("/rm-favorite/<int:id_num>", methods=['POST'])
+def remove_from_favorites(id_num):
+    data = request.json
+    username = data.get('username', None)
+    
+    if not username :
+        res = {"message": "Missing user"}
+        status = 400
+    else:
+        update_recipe = recipes_collection.update_one(
+            {"id": id_num},
+            {"$pull": {"added_favorite": username}}
+            )
+        
+        if update_recipe.matched_count == 0:
+            res = {"message": "No recipe found"}
+            status = 400
+        elif update_recipe.modified_count == 0:
+            res = {"message": "Not a favorite"}
+            status = 200
+        else:
+            res = {"message": "favorite removed"}
+            status = 400
+            
+    response = Response(
+        response = json.dumps(res),
+        status = status,
+        mimetype = "application/json"
+        )
+    
+    return response
+    
+    
