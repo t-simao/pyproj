@@ -1,8 +1,13 @@
+import os
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from helpers import file
 
-uri = file('db.txt')
+uri = os.environ.get("MONGODB_URI")
+if not uri:
+    uri = file('db.txt')
+    
+
 client = MongoClient(uri, server_api=ServerApi('1'))
 
 try:
