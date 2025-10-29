@@ -66,3 +66,29 @@ def login():
         mimetype="application/json"
         )
     return response
+
+@users.route('/remove', methods=['POST'])
+def remove():
+    data = request.json
+    username = data.get('username', None)
+    
+    if not username:
+        res = {"message": "No user chosen"}
+        status = 400
+    else:
+        delete_user = users_collection.delete_one({"username": username})
+        
+        if delete_user.deleted_count == 1:
+            res = {"message": "User Deleted"}
+            status = 200
+        else:
+            res = {"message": "User does not exist"}
+            status = 200
+    
+    response = Response(
+        response=json.dumps(res),
+        status=status,
+        mimetype="application/json"
+        )
+    return response
+        
