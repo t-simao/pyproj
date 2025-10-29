@@ -34,9 +34,21 @@ def get_all_recipes():
 def get_recipes():
     title = request.args.get('title', None)
     ingredients = request.args.get('ingredients', None)
+    category = request.args.get('category', None)
     all_recipies = [fix_id(recipe) for recipe in recipes_collection.find({})]
-
-    if title:
+    
+    if category and title:
+        recipe_cat = [fix_id(recipe) for recipe in recipes_collection.find({"category": category })]
+        res = find_str_in_title(recipe_cat, title.lower())
+        status = 200
+    elif category and ingredients:
+        recipe_cat = [fix_id(recipe) for recipe in recipes_collection.find({"category": category })]
+        res = find_ingerdient_in_ingredients(recipe_cat, ingredients)
+        status = 200
+    elif category:
+        res = [fix_id(recipe) for recipe in recipes_collection.find({"category": category })]
+        status = 200
+    elif title:
         res = find_str_in_title(all_recipies, title.lower())
         status = 200
     elif ingredients:
