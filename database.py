@@ -12,10 +12,13 @@ try:
     recipes_collection = db["Recipe"]
 except Exception as e:
     print(e)
-
-def update():
-    update = recipes_collection.update_many({}, {"$set": {"added_favorite": []}})
     
-    print(update.modified_count, "Documents update.")
+    users_collection = None
+    recipes_collection = None
+
+# def update():
+#     update = recipes_collection.update_many({}, {"$set": {"added_favorite": []}})
+#     
+#     print(update.modified_count, "Documents update.")
     
 # update()

@@ -8,7 +8,7 @@ CORS(app)
 
 @app.route('/')
 def index():
-    return 'HEJ HEJ'
+    return 'HEJ Hej'
 
 app.register_blueprint(users)
 app.register_blueprint(recipes)
