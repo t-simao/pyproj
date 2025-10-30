@@ -21,12 +21,13 @@ except Exception as e:
     users_collection = None
     recipes_collection = None
 
-# def update():
-#     update = recipes_collection.update_many(
-#         {"title": { "$regex": "electronic", "$options": "i" }},
-#         {"$set": {"category": "vegan"}}
-#         )
-#     
-#     print(update.modified_count, "Documents update.")
-#     
-# update()
+# print(recipes_collection.count_documents({}))
+def update():
+    update = recipes_collection.update_many(
+        {},
+        {"$set": {"public": True}}
+        )
+    
+    print(update.modified_count, "Documents update.")
+    
+update()
