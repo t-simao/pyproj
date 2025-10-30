@@ -77,7 +77,7 @@ def get_recipes():
     title = request.args.get('title', None)
     ingredients = request.args.get('ingredients', None)
     category = request.args.get('category', None)
-    username = request.json.get('username', None)
+    username = request.args.get('username', None)
     all_recipies = [fix_id(recipe) for recipe in recipes_collection.find({"public": True})]
     
     if category and title:
